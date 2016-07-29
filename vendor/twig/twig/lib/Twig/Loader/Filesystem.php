@@ -73,7 +73,15 @@ class Twig_Loader_Filesystem implements Twig_LoaderInterface, Twig_ExistsLoaderI
 
         $this->paths[$namespace] = array();
         foreach ($paths as $path) {
-            $this->addPath($path, $namespace);
+
+            if (is_array($path)) {
+                // If path is an array then it is providing a
+                // custom namespace during loading of that path
+                // e.g. [AgreableAppTheme => '/view/partials/...']
+                $this->addPath(reset($path), key($path));
+            } else {
+                $this->addPath($path, $namespace);
+            }
         }
     }
 
